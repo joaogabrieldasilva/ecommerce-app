@@ -1,14 +1,13 @@
 import { Button } from "@/src/components/button";
 import { QuantitySelect } from "@/src/components/quantity-select";
-import { SizeSelect } from "@/src/components/size-select";
 import { THEME } from "@/src/themes";
+import { Product } from "@/src/types/product";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
   Dimensions,
-  Image,
   ImageBackground,
   ScrollView,
   StyleSheet,
@@ -20,28 +19,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const { height } = Dimensions.get("window");
 
-const sizeOptions = [
-  {
-    label: "S",
-    value: "s",
-  },
-  {
-    label: "M",
-    value: "m",
-  },
-  {
-    label: "L",
-    value: "l",
-  },
-  {
-    label: "XL",
-    value: "xl",
-  },
-];
-
 export default function Details() {
-  const [selectedSize, setSelectedSize] = useState(sizeOptions[0].value);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+
+  const product = useLocalSearchParams<{ [K in keyof Product]: string }>();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,7 +32,7 @@ export default function Details() {
           borderRadius={16}
           style={styles.productImage}
           source={{
-            uri: "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
+            uri: product?.imageUrl,
           }}
         >
           <TouchableOpacity
@@ -63,7 +44,7 @@ export default function Details() {
         </ImageBackground>
         <View style={styles.infoContainer}>
           <View style={styles.topActionsContainer}>
-            <Text style={styles.productName}>Light Dress Bless</Text>
+            <Text style={styles.productName}>{product?.name}</Text>
             <QuantitySelect
               value={selectedQuantity}
               onChange={setSelectedQuantity}
@@ -75,30 +56,20 @@ export default function Details() {
               {new Intl.NumberFormat("pt-BR", {
                 style: "decimal",
                 minimumFractionDigits: 2,
-              }).format(5.0)}
+              }).format(Number(product?.rate))}
             </Text>
-            <Text style={styles.ratingCount}>(7.932 reviews)</Text>
+            <Text style={styles.ratingCount}>
+              ({product?.reviewCount} reviews)
+            </Text>
           </View>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita
-            explicabo autem officia deleniti voluptatum nostrum enim cumque
-            architecto, hic eveniet fugit quasi, quis at maxime. Ipsum quam at
-            officiis ab?
-          </Text>
-        </View>
-        <View style={styles.sizeContainer}>
-          <Text style={styles.sizeTitle}>Choose Size</Text>
-          <View style={{ marginTop: 12 }}>
-            <SizeSelect
-              options={sizeOptions}
-              value={selectedSize}
-              onChange={setSelectedSize}
-            />
-          </View>
+          <Text style={styles.description}>{product?.description}</Text>
         </View>
       </ScrollView>
       <Button
-        text="Add to Cart | $199.9"
+        text={`Add to Cart | ${new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(Number(product?.price))}`}
         onPress={() => {}}
         style={{ marginTop: 16 }}
         leftIcon={<Ionicons size={20} name="bag-outline" color="white" />}

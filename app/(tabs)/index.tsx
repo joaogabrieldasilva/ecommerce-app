@@ -1,14 +1,18 @@
+import { DressIcon } from "@/src/components/icons/dress";
+import { IconProps } from "@/src/components/icons/icon-props";
+import { PantsIcon } from "@/src/components/icons/pants";
+import { TShirtIcon } from "@/src/components/icons/t-shirt";
 import { ProductCard } from "@/src/components/product-card";
 import { THEME } from "@/src/themes";
+import { Product } from "@/src/types/product";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useMemo, useState } from "react";
+import { IconProps as ExpoVectorIconProps } from "@expo/vector-icons/build/createIconSet";
+import { Link } from "expo-router";
+import { useMemo, useState } from "react";
 import {
   FlatList,
   Image,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -19,95 +23,96 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const products = [
   {
     id: 1,
-    name: "Camiseta Básica",
-    category: "Roupas Casuais",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
+    name: "Vestido Curto com Gola Halter",
+    category: "dress",
+    imageUrl: "https://img.lojasrenner.com.br/item/583798201/original/3.jpg",
     price: 49.9,
     rate: 4.5,
+    reviewCount: 7190,
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita explicabo autem officia deleniti voluptatum nostrum enim cumque architecto, hic eveniet fugit quasi, quis at maxime. Ipsum quam at officiis ab?",
   },
   {
     id: 2,
-    name: "Calça Jeans Slim",
-    category: "Roupas Casuais",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
+    name: "Vestido Curto com Gola V",
+    category: "dress",
+    imageUrl: "https://img.lojasrenner.com.br/item/624027754/original/3.jpg",
     price: 129.9,
     rate: 4.8,
+    reviewCount: 7190,
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita explicabo autem officia deleniti voluptatum nostrum enim cumque architecto, hic eveniet fugit quasi, quis at maxime. Ipsum quam at officiis ab?",
   },
   {
     id: 3,
-    name: "Vestido Floral",
-    category: "Roupas Femininas",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
+    name: "Camiseta com Textura Horizontal",
+    category: "t-shirt",
+    imageUrl: "https://img.lojasrenner.com.br/item/921649189/original/3.jpg",
     price: 89.9,
     rate: 4.7,
+    reviewCount: 7190,
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita explicabo autem officia deleniti voluptatum nostrum enim cumque architecto, hic eveniet fugit quasi, quis at maxime. Ipsum quam at officiis ab?",
   },
   {
     id: 4,
-    name: "Camisa Social Branca",
-    category: "Roupas Formais",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
+    name: "Camiseta Comfort em Algodão e",
+    category: "t-shirt",
+    imageUrl: "https://img.lojasrenner.com.br/item/927608783/original/3.jpg",
     price: 99.9,
     rate: 4.3,
+    reviewCount: 7190,
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita explicabo autem officia deleniti voluptatum nostrum enim cumque architecto, hic eveniet fugit quasi, quis at maxime. Ipsum quam at officiis ab?",
   },
   {
     id: 5,
-    name: "Jaqueta de Couro",
-    category: "Jaquetas e Casacos",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
+    name: "Calça Jogger em Moletom com Bolsos Táticos Preto",
+    category: "pants",
+    imageUrl: "https://img.lojasrenner.com.br/item/877869511/original/3.jpg",
     price: 249.9,
     rate: 4.9,
+    reviewCount: 7190,
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita explicabo autem officia deleniti voluptatum nostrum enim cumque architecto, hic eveniet fugit quasi, quis at maxime. Ipsum quam at officiis ab?",
   },
   {
     id: 6,
-    name: "Shorts de Sarja",
-    category: "Roupas Casuais",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
+    name: "Calça Baggy em Jeans com Recortes e Bolso Cargo Preto",
+    category: "pants",
+    imageUrl: "https://img.lojasrenner.com.br/item/894080141/original/3.jpg",
     price: 69.9,
     rate: 4.1,
+    reviewCount: 7190,
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita explicabo autem officia deleniti voluptatum nostrum enim cumque architecto, hic eveniet fugit quasi, quis at maxime. Ipsum quam at officiis ab?",
+  },
+] as Product[];
+
+const categories = [
+  {
+    label: "Todos",
+    value: null,
+    icon: (props: Partial<ExpoVectorIconProps<keyof typeof Ionicons>>) => (
+      <Ionicons {...props} name="grid-outline" />
+    ),
   },
   {
-    id: 7,
-    name: "Blusa de Lã",
-    category: "Roupas de Inverno",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
-    price: 109.9,
-    rate: 4.6,
+    label: "Vestidos",
+    value: "dress",
+    icon: (props: IconProps) => <DressIcon {...props} />,
   },
   {
-    id: 8,
-    name: "Saia Midi",
-    category: "Roupas Femininas",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
-    price: 79.9,
-    rate: 4.4,
+    label: "Camisas",
+    value: "t-shirt",
+    icon: (props: IconProps) => <TShirtIcon {...props} />,
   },
   {
-    id: 9,
-    name: "Moletom com Capuz",
-    category: "Roupas Casuais",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
-    price: 119.9,
-    rate: 4.2,
+    label: "Calças",
+    value: "pants",
+    icon: (props: IconProps) => <PantsIcon {...props} />,
   },
-  {
-    id: 10,
-    name: "Tênis Esportivo",
-    category: "Calçados",
-    imageUrl:
-      "https://img.ltwebstatic.com/images3_spmp/2024/09/20/76/1726761643f48502bad6e0735af5fa12cf93368871_thumbnail_900x.webp",
-    price: 199.9,
-    rate: 4.8,
-  },
-];
+] as const;
 
 const normalizeString = (str: string) =>
   str
@@ -117,22 +122,29 @@ const normalizeString = (str: string) =>
 
 export default function Index() {
   const [searchFilter, setSearchFilter] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const filteredProducts = useMemo(() => {
-    if (!searchFilter) {
-      return products;
+    let filteredProducts = products;
+
+    if (searchFilter) {
+      filteredProducts = products.filter((product) => {
+        return normalizeString(product.name).includes(
+          normalizeString(searchFilter)
+        );
+      });
     }
 
-    return products.filter((product) => {
-      return normalizeString(product.name).includes(
-        normalizeString(searchFilter)
+    if (selectedCategory) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.category === selectedCategory
       );
-    });
-  }, [searchFilter]);
+    }
+    return filteredProducts;
+  }, [searchFilter, selectedCategory]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="dark" />
       <View style={styles.headerContainer}>
         <View>
           <Text style={styles.welcomeText}>Hello, Welcome</Text>
@@ -152,19 +164,81 @@ export default function Index() {
           onChangeText={setSearchFilter}
           style={styles.input}
           placeholder="Search clothes..."
+          autoCapitalize="none"
+          autoComplete="off"
+          autoCorrect={false}
           placeholderTextColor={THEME.COLORS.textTertiary}
+        />
+      </View>
+      <View>
+        <FlatList
+          data={categories}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 12 }}
+          style={{ marginBottom: 12 }}
+          keyExtractor={(item) => item.label}
+          renderItem={({ item }) => {
+            const Icon = item.icon;
+            const isSelected = item.value === selectedCategory;
+
+            return (
+              <Pressable
+                disabled={isSelected}
+                onPress={() => setSelectedCategory(item.value)}
+              >
+                <View
+                  style={{
+                    borderWidth: 0.5,
+                    borderColor: THEME.COLORS.textTertiary,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    columnGap: 4,
+                    borderRadius: 8,
+                    padding: 8,
+                    backgroundColor: isSelected
+                      ? THEME.COLORS.foregroundColor
+                      : THEME.COLORS.backgroundColor,
+                  }}
+                >
+                  <Icon
+                    color={
+                      isSelected
+                        ? THEME.COLORS.textForegroundContrast
+                        : THEME.COLORS.textPrimary
+                    }
+                    size={16}
+                  />
+                  <Text
+                    style={{
+                      color: isSelected
+                        ? THEME.COLORS.textForegroundContrast
+                        : THEME.COLORS.textPrimary,
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                </View>
+              </Pressable>
+            );
+          }}
         />
       </View>
       <FlatList
         data={filteredProducts}
+        showsVerticalScrollIndicator={false}
         numColumns={2}
         columnWrapperStyle={{ gap: 12 }}
-        contentContainerStyle={{ gap: 12, paddingBottom: 84 }}
+        contentContainerStyle={{
+          gap: 12,
+          alignItems: "center",
+          paddingBottom: 84,
+        }}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Pressable onPress={() => router.navigate("/details")}>
+          <Link href={{ pathname: "/details", params: item }}>
             <ProductCard {...item} />
-          </Pressable>
+          </Link>
         )}
       />
     </SafeAreaView>

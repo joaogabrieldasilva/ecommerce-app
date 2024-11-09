@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
   valueText: {
     color: THEME.COLORS.textPrimary,
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 16,
   },
 });

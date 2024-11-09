@@ -23,7 +23,11 @@ export function TabBar({ descriptors, state, navigation }: BottomTabBarProps) {
         };
 
         return (
-          <Pressable style={styles.tabIconContainer} onPress={onPress}>
+          <Pressable
+            key={route.key}
+            style={styles.tabIconContainer}
+            onPress={onPress}
+          >
             {options.tabBarIcon
               ? options.tabBarIcon({
                   color: THEME.COLORS.textForegroundContrast,

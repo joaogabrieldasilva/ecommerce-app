@@ -20,14 +20,16 @@ export function ProductCard({
   rate,
 }: ProductCardProps) {
   return (
-    <View>
+    <View style={styles.container}>
       <Image
         borderRadius={16}
         style={styles.image}
         source={{ uri: imageUrl }}
         resizeMode="cover"
       />
-      <Text style={styles.productName}>{name}</Text>
+      <Text style={styles.productName} numberOfLines={1}>
+        {name}
+      </Text>
       <Text style={styles.productCategory}>{category}</Text>
       <View style={styles.bottomInfoContainer}>
         <Text style={styles.productPrice}>
@@ -38,7 +40,12 @@ export function ProductCard({
         </Text>
         <View style={styles.rateContainer}>
           <Ionicons name="star" size={14} style={styles.starIcon} />
-          <Text style={styles.rateText}>{rate}</Text>
+          <Text style={styles.rateText}>
+            {new Intl.NumberFormat("pt-BR", {
+              style: "decimal",
+              minimumFractionDigits: 2,
+            }).format(Number(rate))}
+          </Text>
         </View>
       </View>
     </View>
@@ -46,11 +53,14 @@ export function ProductCard({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    maxWidth: width / 2 - 20,
+  },
   image: {
-    width: width / 2 - 24,
     height: width * 0.65,
   },
   productName: {
+    flex: 1,
     marginTop: 6,
     color: THEME.COLORS.textPrimary,
     fontWeight: "bold",

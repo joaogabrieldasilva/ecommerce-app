@@ -2,8 +2,11 @@ import { TabBar } from "@/src/components/tab-bar";
 import { THEME } from "@/src/themes";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import { Text, View } from "react-native";
 
 export default function TabsLayout() {
+  const productCount = 99;
+
   return (
     <Tabs
       screenOptions={{
@@ -24,14 +27,35 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="details"
+        name="cart"
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              size={size}
-              name={focused ? "bag" : "bag-outline"}
-              color={color}
-            />
+            <View>
+              <Ionicons
+                size={size}
+                name={focused ? "bag" : "bag-outline"}
+                color={color}
+              />
+              {productCount > 0 ? (
+                <View
+                  style={{
+                    position: "absolute",
+                    minWidth: 16,
+                    height: 16,
+                    backgroundColor: "#d63346",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 8,
+                    top: -4,
+                    right: -4,
+                  }}
+                >
+                  <Text style={{ color: "white", fontSize: 10 }}>
+                    {productCount}
+                  </Text>
+                </View>
+              ) : null}
+            </View>
           ),
         }}
       />

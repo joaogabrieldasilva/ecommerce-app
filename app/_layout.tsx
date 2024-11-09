@@ -37,6 +37,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
+      <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }} />
     </SafeAreaProvider>
   );
