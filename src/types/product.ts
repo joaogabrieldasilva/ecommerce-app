@@ -8,3 +8,5 @@ export type Product = {
   reviewCount: number;
   description: string;
 };
+
+export type CartProduct = Product & { quantity: number };

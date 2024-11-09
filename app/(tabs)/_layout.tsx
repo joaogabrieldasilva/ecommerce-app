@@ -1,11 +1,12 @@
 import { TabBar } from "@/src/components/tab-bar";
-import { THEME } from "@/src/themes";
+import { useCartStoreProducts } from "@/src/stores/cart-store";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function TabsLayout() {
-  const productCount = 99;
+  const products = useCartStoreProducts();
+  const productCount = products.length;
 
   return (
     <Tabs

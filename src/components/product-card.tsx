@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import { THEME } from "../themes";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 type ProductCardProps = {
   name: string;
@@ -54,7 +54,7 @@ export function ProductCard({
 
 const styles = StyleSheet.create({
   container: {
-    maxWidth: width / 2 - 20,
+    maxWidth: width / 2 - 18,
   },
   image: {
     height: width * 0.65,

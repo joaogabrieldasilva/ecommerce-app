@@ -1,5 +1,6 @@
 import { Button } from "@/src/components/button";
 import { QuantitySelect } from "@/src/components/quantity-select";
+import { useCartStoreActions } from "@/src/stores/cart-store";
 import { THEME } from "@/src/themes";
 import { Product } from "@/src/types/product";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,6 +24,8 @@ export default function Details() {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   const product = useLocalSearchParams<{ [K in keyof Product]: string }>();
+
+  const { addProduct } = useCartStoreActions();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,8 +72,18 @@ export default function Details() {
         text={`Add to Cart | ${new Intl.NumberFormat("pt-BR", {
           style: "currency",
           currency: "BRL",
-        }).format(Number(product?.price))}`}
-        onPress={() => {}}
+        }).format(Number(product?.price) * selectedQuantity)}`}
+        onPress={() => {
+          addProduct({
+            ...product,
+            quantity: selectedQuantity,
+            id: Number(product.id),
+            price: Number(product.price),
+            reviewCount: Number(product.reviewCount),
+            rate: Number(product.rate),
+          });
+          router.navigate("/cart");
+        }}
         style={{ marginTop: 16 }}
         leftIcon={<Ionicons size={20} name="bag-outline" color="white" />}
       />
