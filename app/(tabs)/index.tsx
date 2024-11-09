@@ -231,6 +231,7 @@ export default function Index() {
         columnWrapperStyle={{ gap: 12 }}
         contentContainerStyle={{
           gap: 12,
+          paddingLeft: 6,
           paddingBottom: 84,
         }}
         keyExtractor={(item) => item.id.toString()}

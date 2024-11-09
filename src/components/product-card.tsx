@@ -54,7 +54,7 @@ export function ProductCard({
 
 const styles = StyleSheet.create({
   container: {
-    maxWidth: width / 2 - 18,
+    maxWidth: width / 2 - 24,
   },
   image: {
     height: width * 0.65,
